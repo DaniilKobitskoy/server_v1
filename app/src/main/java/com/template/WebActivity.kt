@@ -16,7 +16,7 @@ class WebActivity : AppCompatActivity() {
         var webview = findViewById<WebView>(R.id.webView)
         webview.loadUrl(url +   "/?packageid=$packageName")
         Log.d("tag3", "$url")
-
+Log.d("timezine", "time $tz")
 
 
     }
