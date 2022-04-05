@@ -7,4 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="nyanza_color">#D4F2D2</color>
+    <color name="manatee_color">#ABA9BF</color>
+    <color name="purple_violet">#34113F</color>
+    <color name="purple_violet_txt">#230A2B</color>
+    <color name="transparent">#868784</color>
+    <color name="purple_color">#BEB7DF</color>
+    <color name="salate_color">#CC417066</color>
+    <color name="gray_color">#CC41554E</color>
+    <color name="blackgray_color">#CC1E201F</color>
+
+    <color name="ic_launcher_background_color">#ABA9BF</color>
+
+    <color name="black_color">#FF000000</color>
+    <color name="txt_color">#437A7A</color>
+    <color name="white_color">#FFFFFFFF</color>
+    <color name="white_color_transperent">#4DFFFFFF</color>
+    <color name="color_bluegray">#4D143B59</color>
 </resources>

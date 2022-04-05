@@ -17,9 +17,11 @@
         >
 
         <activity
-            android:name=".WebActivity"
+            android:name="com.template.WebActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
         <activity
             android:name=".LoadingActivity"
             android:exported="true" >
