@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -18,13 +20,12 @@ import com.template.databinding.ActivityLoadingBinding
 import java.util.*
 
 
-
-
         class LoadingActivity : AppCompatActivity() {
-            var APP_PREFERENCES = "mysettings"
-          var APP_PREFERENCES_URL: String = ""
-            var mSettings: SharedPreferences? = null
+                var APP_PREFERENCES = "mysettings"
+                var APP_PREFERENCES_KOLVO: Int = 0
+                var mSettings: SharedPreferences? = null
                 private val MY_SETTINGS = "my_settings"
+                var APP_PREFERENCES_URL: String = ""
                 private lateinit var database: DatabaseReference
                 private lateinit var baseAnalytics: FirebaseAnalytics
                 lateinit var url: String
@@ -32,18 +33,28 @@ import java.util.*
 
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-                mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+                mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
                 binding = ActivityLoadingBinding.inflate(layoutInflater)
                 setContentView(binding.root)
                 database = Firebase.database.reference
                 baseAnalytics = Firebase.analytics
-                var length: Int = APP_PREFERENCES_URL.trim().length
 
-                if (length > 0){
+                val sharedPreferences: SharedPreferences? = getSharedPreferences(APP_PREFERENCES , Context.MODE_PRIVATE)
+                if(sharedPreferences!!.contains(APP_PREFERENCES_URL)) {
+                    val url:String = sharedPreferences.getString(APP_PREFERENCES_URL, "").toString()
+                    Log.d("URL", url)
+                }
+//                val sharedPreferences: SharedPreferences? = getSharedPreferences(APP_PREFERENCES , Context.MODE_PRIVATE)
+//                val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
+//                editor.putInt("kolvo", APP_PREFERENCES_KOLVO)
+//                editor.apply()
+                if (APP_PREFERENCES_KOLVO > 0){
                     startWebView()
 
                 }else{
                     shareppref()
+//                    Log.d("kolvo", APP_PREFERENCES_KOLVO.toString())
 
                 }
 
@@ -52,16 +63,32 @@ import java.util.*
                 database.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val db = database.toString()
-                        Log.d("TAG", "Value is: $database ")
-                        Log.d("TAG", "Value is: $db ")
+                        Log.d("TAG1", "Value is: $database ")
+                        Log.d("TAG2", "Value is: $db ")
                         //get package name
                         val packageName = applicationContext.packageName
                         url =
                             "$database/?packageid=$packageName&usserid=${UUID.randomUUID()}&getz=${TimeZone.getDefault()}&getr=utm_source=google-play&utm_medium=organic"
-                        var editor: SharedPreferences.Editor = mSettings!!.edit()
-                        editor.putString(APP_PREFERENCES_URL, url)
+
+                        Log.d("kolvo", APP_PREFERENCES_KOLVO.toString())
+                        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+                        val sharedPreferences: SharedPreferences? = getSharedPreferences(APP_PREFERENCES , Context.MODE_PRIVATE)
+                        val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
+                        editor.putString("url", url)
                         editor.apply()
-                        Log.d("URL", APP_PREFERENCES_URL)
+                        if(sharedPreferences.contains(APP_PREFERENCES_URL)) {
+                            val url:String = sharedPreferences.getString(APP_PREFERENCES_URL, "").toString()
+                            Log.d("URL", url)
+                        }
+//                        val sharedPreferences1: SharedPreferences? = getSharedPreferences(APP_PREFERENCES , Context.MODE_PRIVATE)
+//
+//                        val editor1: SharedPreferences.Editor = sharedPreferences1!!.edit()
+//                        editor1.putInt("kolvo", APP_PREFERENCES_KOLVO)
+//                        editor1.apply()
+//                        if(sharedPreferences1.contains(APP_PREFERENCES_KOLVO.toString())) {
+//                            val kolvo:String = sharedPreferences1.getString(APP_PREFERENCES_KOLVO.toString(), "").toString()
+//                            Log.d("kolvo", APP_PREFERENCES_KOLVO.toString())
+//                        }
 
                         startWebView()
                     }
@@ -90,21 +117,30 @@ import java.util.*
 
             }
             private fun startWebView() {
-                val intent = Intent(this@LoadingActivity, WebActivity::class.java)
-                intent.putExtra("url", APP_PREFERENCES_URL)
 
-            startActivity(intent)
-                finish()
+
+                    val sharedPreferences: SharedPreferences? = getSharedPreferences(APP_PREFERENCES , Context.MODE_PRIVATE)
+
+                    if(sharedPreferences!!.contains(APP_PREFERENCES_URL)) {
+                        val url:String = sharedPreferences.getString(APP_PREFERENCES_URL, "").toString()
+                        Log.d("URL", url)
+                    }
+                    val intent = Intent(this@LoadingActivity, WebActivity::class.java)
+                    intent.putExtra("url", url)
+
+                    startActivity(intent)
+                    finish()
+
+
             }
 
-//            override fun onStop() {
-//                APP_PREFERENCES_URL
-//                super.onStop()
-//            }
             companion object {
                 private const val MY_SETTINGS = "my_settings"
             }
+
         }
+
+
 
 
 
